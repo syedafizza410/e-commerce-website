@@ -8,6 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        '128': '32rem', 
+        '144': '36rem', 
+      },
+      weight:{
+        '112': '27rem', 
+        '144': '36rem', 
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
