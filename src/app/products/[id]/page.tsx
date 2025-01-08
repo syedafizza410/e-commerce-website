@@ -4,8 +4,8 @@ import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { fetchProductById } from '../../../api/products/route';
-import React from 'react';
+import { fetchProductById } from '../../api/products/route';
+import { useParams } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -13,15 +13,17 @@ interface Product {
   details?: string;
   price: number;
   image: string;
-  originalPrice?: number | null; 
-  sale?: boolean; 
+  originalPrice?: number | null;
+  sale?: boolean;
 }
 
-const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => {
+const ProductDetailsPage = () => {
   const { addToCart } = useCart();
   const router = useRouter();
+  const params = useParams(); 
 
-  const { id } = React.use(params);
+  const productIdNumber = Number(params?.id); 
+
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -31,25 +33,16 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
 
     const fetchProduct = async () => {
       try {
-        setLoading(true);
-        const productData = await fetchProductById(Number(id));
+        const productData = await fetchProductById(productIdNumber);
         if (isMounted) {
-          if (productData) {
-            setProduct({
-              ...productData,
-              details: productData.details || 'No details available',
-              originalPrice: productData.originalPrice ?? null,
-              sale: productData.sale ?? false,
-            });
-          } else {
-            setProduct(null);
-          }
+          setProduct(productData || null);
         }
       } catch (error) {
         console.error('Failed to fetch product:', error);
-        if (isMounted) setProduct(null);
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -58,12 +51,10 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [productIdNumber]);
 
   const handleIncreaseQuantity = () => setQuantity(quantity + 1);
-  const handleDecreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
-  };
+  const handleDecreaseQuantity = () => quantity > 1 && setQuantity(quantity - 1);
 
   const handleAddToCart = () => {
     if (product) {
@@ -86,13 +77,9 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
     }
   };
 
-  if (loading) {
-    return <div className="p-8 text-gray-600">Loading product details...</div>;
-  }
+  if (loading) return <div className="p-8 text-gray-600">Loading product details...</div>;
 
-  if (!product) {
-    return <div className="p-8 text-red-600">Product not found!</div>;
-  }
+  if (!product) return <div className="p-8 text-red-600">Product not found!</div>;
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -115,7 +102,6 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
           <h2 className="uppercase text-white text-sm tracking-wide">Brand Name</h2>
           <h1 className="text-3xl font-bold">{product.name}</h1>
 
-          {/* Pricing */}
           <div className="flex items-center space-x-4">
             {product.originalPrice && (
               <span className="text-gray-400 line-through text-lg">
@@ -132,10 +118,8 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
             )}
           </div>
 
-          {/* Product Details */}
           <p className="text-white">{product.details}</p>
 
-          {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
             <span className="text-white">Quantity</span>
             <button
@@ -153,7 +137,6 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string }> }) => 
             </button>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col md:flex-row gap-4">
             <button
               onClick={handleAddToCart}

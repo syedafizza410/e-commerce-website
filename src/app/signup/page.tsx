@@ -1,4 +1,3 @@
-// pages/signup.tsx
 import Link from 'next/link';
 
 const SignUpPage = () => {

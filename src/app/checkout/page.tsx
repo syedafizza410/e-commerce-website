@@ -17,6 +17,8 @@ const CheckoutPage = () => {
   });
 
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const parsedProduct = {
@@ -35,17 +37,20 @@ const CheckoutPage = () => {
     setQuantity((prev) => Math.max(1, prev + change));
   };
 
-  const handlePlaceOrder = async () => {
-    const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement | null;
-    const addressInput = document.querySelector('input[placeholder="Address"]') as HTMLInputElement | null;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked') as HTMLInputElement | null;
+  const handlePlaceOrder = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); 
 
-    if (!emailInput?.value.includes('@')) {
+    const formData = new FormData(event.currentTarget); 
+    const email = formData.get('email') as string;
+    const address = formData.get('address') as string;
+    const paymentMethod = formData.get('payment') as string;
+
+    if (!email || !email.includes('@')) {
       alert('Please enter a valid email.');
       return;
     }
 
-    if (!addressInput?.value) {
+    if (!address) {
       alert('Please provide a valid address.');
       return;
     }
@@ -59,22 +64,33 @@ const CheckoutPage = () => {
       productId: product.id,
       productName: product.name,
       totalAmount: product.price * quantity,
-      email: emailInput.value,
-      address: addressInput.value,
-      paymentMethod: paymentMethod.value,
+      email,
+      address,
+      paymentMethod,
     };
 
-    const response = await fetch('/api/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData),
-    });
+    setLoading(true);
+    setError(null);
 
-    if (response.ok) {
-      alert('Order placed successfully!');
-      router.push('/');
-    } else {
-      alert('Failed to place order. Please try again.');
+    try {
+      const response = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('Order placed successfully!');
+        router.push('/');
+      } else {
+        setError(result.message || 'Failed to place order. Please try again.');
+      }
+    } catch (err) {
+      setError('Error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,32 +129,76 @@ const CheckoutPage = () => {
 
         <div className="lg:w-1/2">
           <h2 className="text-2xl font-bold mb-4">Contact & Delivery</h2>
-          <form className="grid grid-cols-1 gap-4">
-            <input type="email" placeholder="Email" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="First Name" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="Last Name" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="Address" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="City" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="Postal Code" className="border p-3 rounded bg-gray-700 text-white" />
-            <input type="text" placeholder="Phone" className="border p-3 rounded bg-gray-700 text-white" />
+          <form className="grid grid-cols-1 gap-4" onSubmit={handlePlaceOrder}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              placeholder="First Name"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              placeholder="City"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              placeholder="Postal Code"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              className="border p-3 rounded bg-gray-700 text-white"
+            />
+            <div className="flex flex-col gap-4 mt-4">
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  className="mr-2"
+                  value="Cash on Delivery"
+                  required
+                />{' '}
+                Cash on Delivery
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  className="mr-2"
+                  value="Card"
+                  required
+                />{' '}
+                Debit/Credit Card
+              </label>
+            </div>
+            <button
+              type="submit"
+              className="bg-green-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-green-700 w-full"
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : 'Complete Order'}
+            </button>
           </form>
 
-          <h2 className="text-2xl font-bold mt-6">Payment</h2>
-          <div className="flex flex-col gap-4 mt-4">
-            <label>
-              <input type="radio" name="payment" className="mr-2" value="Cash on Delivery" /> Cash on Delivery
-            </label>
-            <label>
-              <input type="radio" name="payment" className="mr-2" value="Card" /> Debit/Credit Card
-            </label>
-          </div>
-
-          <button
-            onClick={handlePlaceOrder}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-green-700 w-full"
-          >
-            Complete Order
-          </button>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       </div>
     </div>

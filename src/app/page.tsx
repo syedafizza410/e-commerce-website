@@ -1,4 +1,3 @@
-// pages/Home.tsx
 import LatestProducts from '../components/LatestProducts';
 import DiscountProducts from '../components/DiscountProducts';
 
@@ -29,10 +28,8 @@ const Home = () => {
       </header>
 
       <main className="flex flex-col items-center justify-center p-8 bg-black text-white min-h-screen">
-        {/* Latest Products Section */}
         <LatestProducts />
 
-        {/* Sale Products Section */}
         <DiscountProducts />
       </main>
     </>

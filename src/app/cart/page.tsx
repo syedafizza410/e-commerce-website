@@ -7,7 +7,6 @@ const CartPage = () => {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
-  // Decrease quantity or remove the product
   const handleRemove = (id: number) => {
     const product = cart.find((item) => item.id === id);
     if (product) {
