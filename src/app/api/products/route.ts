@@ -64,6 +64,24 @@ export const fetchProducts = async () => {
       price: 290,
       image: '/product7.webp',
     },
+    {
+      id: 8,
+      name: 'ROLEX GMT-MASTER II',
+      details:
+        'Stunning Gents Rolex GMT-Master II Watch in 18ct Yellow Gold and Stainless Steel with a Black Dial and 18ct Yellow Gold Rotating Bezel with a Grey and Black Ceramic Insert',
+      price: 300,
+      image: '/product8.png',
+      originalPrice: 350,
+      sale: true,
+    },
+    {
+      id: 9,
+      name: 'A. Lange & Sohne 1815 Up/Down Watch',
+      details:
+        'The elegant A. Lange & Söhne 1815 Up/Down ref.221.021 is an embodiment of German watchmaking',
+      price: 150,
+      image: '/product9.jpg',
+    },
   ];
 };
 

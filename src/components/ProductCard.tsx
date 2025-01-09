@@ -10,7 +10,7 @@ interface Product {
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
+    <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 hover:scale-110">
       <img src={product.image} alt={product.name} className="w-full h-80 object-cover rounded mb-4" />
       
       <h3 className="text-gray-900 text-lg font-semibold">{product.name}</h3>

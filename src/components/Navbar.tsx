@@ -2,10 +2,17 @@
 
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { useState } from 'react';
 
 const Navbar = () => {
   const { cart } = useCart(); // Access cart context
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle menu visibility
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
   return (
     <nav className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow-md rounded-md">
@@ -14,15 +21,27 @@ const Navbar = () => {
         <Link href="/">Timeless Watches</Link>
       </h1>
 
+      {/* Hamburger Menu for Small Screens */}
+      <button
+        className="text-white text-3xl md:hidden focus:outline-none"
+        onClick={toggleMenu}
+      >
+        {isMenuOpen ? '✖' : '☰'}
+      </button>
+
       {/* Navigation Links */}
-      <ul className="flex space-x-6 text-lg">
-        <li className="hover:text-gray-300 transition duration-300">
+      <ul
+        className={`${
+          isMenuOpen ? 'block' : 'hidden'
+        } md:flex md:space-x-6 text-lg absolute md:static top-16 left-0 w-full md:w-auto bg-gray-900 md:bg-transparent text-center md:text-left`}
+      >
+        <li className="hover:bg-gray-800 py-2 px-4 md:hover:bg-transparent md:hover:text-gray-300 transition duration-300">
           <Link href="/">Home</Link>
         </li>
-        <li className="hover:text-gray-300 transition duration-300">
+        <li className="hover:bg-gray-800 py-2 px-4 md:hover:bg-transparent md:hover:text-gray-300 transition duration-300">
           <Link href="/products">Products</Link>
         </li>
-        <li className="hover:text-gray-300 transition duration-300">
+        <li className="hover:bg-gray-800 py-2 px-4 md:hover:bg-transparent md:hover:text-gray-300 transition duration-300">
           <Link href="/cart">
             Cart{' '}
             {cartCount > 0 && (
@@ -32,10 +51,10 @@ const Navbar = () => {
             )}
           </Link>
         </li>
-        <li className="hover:text-gray-300 transition duration-300">
-          <Link href="/login">Login</Link>
+        <li className="hover:bg-gray-800 py-2 px-4 md:hover:bg-transparent md:hover:text-gray-300 transition duration-300">
+          <Link href="/contact">Contact</Link>
         </li>
-        <li className="hover:text-gray-300 transition duration-300">
+        <li className="hover:bg-gray-800 py-2 px-4 md:hover:bg-transparent md:hover:text-gray-300 transition duration-300">
           <Link href="/faq">FAQ</Link>
         </li>
       </ul>

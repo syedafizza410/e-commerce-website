@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <>
       <header
-        className="bg-cover bg-center h-128 text-white flex items-center justify-center"
+        className="bg-cover bg-center h-144 text-white flex items-center justify-center"
         style={{ backgroundImage: "url('/background.webp')" }}
       >
         <div className="text-center bg-black bg-opacity-50">
@@ -19,7 +19,7 @@ const Home = () => {
           <div className="mt-6">
             <a
               href="/products"
-              className="inline-block bg-white text-black hover:bg-black hover:text-white text-lg font-bold py-3 px-8 rounded-xl transition duration-300"
+              className="inline-block bg-white text-black hover:bg-black hover:text-white text-lg font-bold py-3 px-8 rounded-xl transition-transform duration-300 hover:scale-105"
             >
               Shop Now
             </a>

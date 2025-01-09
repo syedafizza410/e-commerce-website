@@ -18,7 +18,7 @@ const FAQPage = () => {
     },
     {
       question: "What payment methods do you accept?",
-      answer: "We accept credit/debit cards, PayPal, and Apple Pay for your convenience.",
+      answer: "We accept credit/debit cards and cash on delivery for your convenience.",
     },
     {
       question: "Are Timeless Watches water-resistant?",
