@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export const fetchProducts = async () => {
+const fetchProducts = async () => {
   return [
     {
       id: 1,
@@ -85,9 +85,9 @@ export const fetchProducts = async () => {
   ];
 };
 
-export const fetchProductById = async (id: number) => {
+const fetchProductById = async (id: number) => {
   const products = await fetchProducts();
-  return products.find(product => product.id === id);
+  return products.find((product) => product.id === id);
 };
 
 export async function GET() {
