@@ -1,8 +1,8 @@
-import { fetchProducts } from '../api/products/route';
+import { fetchProducts } from '@/utils/products'; // Correct import
 import ProductCard from '../../components/ProductCard';
 
 const ProductsPage = async () => {
-  const products = await fetchProducts();
+  const products = await fetchProducts(); // Fetch all products
 
   return (
     <div className="flex flex-col items-center p-8 bg-black text-white min-h-screen">

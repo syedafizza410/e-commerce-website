@@ -4,7 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { fetchProductById } from '../../api/products/route';
+import { fetchProductById } from '@/utils/products';
 import { useParams } from 'next/navigation';
 
 interface Product {
