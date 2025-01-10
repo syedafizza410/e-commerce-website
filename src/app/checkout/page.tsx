@@ -2,9 +2,9 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
-const CheckoutPage = () => {
+const CheckoutPageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -38,9 +38,9 @@ const CheckoutPage = () => {
   };
 
   const handlePlaceOrder = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget); 
+    const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const address = formData.get('address') as string;
     const paymentMethod = formData.get('payment') as string;
@@ -204,5 +204,11 @@ const CheckoutPage = () => {
     </div>
   );
 };
+
+const CheckoutPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <CheckoutPageContent />
+  </Suspense>
+);
 
 export default CheckoutPage;
