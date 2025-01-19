@@ -1,8 +1,7 @@
-"use client"; // Required for state management in Next.js
+"use client"; 
 
 import { createContext, useContext, useState } from "react";
 
-// Types
 interface CartItem {
   id: number;
   name: string;
@@ -16,10 +15,10 @@ interface CartContextType {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void; // Added clearCart
+  clearCart: () => void; 
 }
 
-// Context Creation
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -52,7 +51,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const clearCart = () => {
-    setCart([]); // Clears the cart
+    setCart([]); 
   };
 
   return (
@@ -62,7 +61,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
-        clearCart, // Include clearCart in the provider
+        clearCart, 
       }}
     >
       {children}
